@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>MHacks Demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+
+
+    <script type="text/javascript">
+        $("document").ready(function() {
+            $("button").click(function () {
+                $.ajax({
+                    type:'GET',
+                    url: '/ajax/endpoint',
+                    dataType: 'json',
+                    success: function (data) {
+                        $(document).ready(function () {
+                            if (!data.status) {
+                                console.log("Status failed");
+                                $("body").append("Sorry, please try again.");
+                            } else {
+                                console.log("Data is : " + data);
+                                var count = 0;
+                                var txt_start = "<div class=\"container\">";
+
+                                while (count < 5) {
+                                    var temp = data.tones;
+                                    console.log("Data tones is : " + data.tones);
+                                    var toneId = temp[count].tone_id;
+                                    var score = (temp[count].score) * 100;
+                                    var place = "";
+                                    if (toneId == "anger") {
+                                        place = '\'em\ em-angry\'';
+                                    } else if (toneId == "disgust") {
+                                        place = '\'em\ em-confounded\'';
+                                    } else if (toneId == "fear") {
+                                        place = '\'em\ em-fearful\'';
+                                    } else if (toneId == "joy") {
+                                        place = '\'em\ em-joy\'';
+                                    } else {
+                                        place = '\'em\ em-disappointed\'';
+                                    }
+                                    var txt = '<div class=\"row\ ' + count + '\">';
+                                    var txt1 = '<div class="col-1"><p><i class=' + place + '></i></p></div>';
+                                    var txt2 = '<div class="col-2"><p><i class=' + score + '></i></p>';
+                                    var txt3 = "</div></div>";
+                                    txt_start = txt_start +txt +txt1+ txt2+ txt3;
+                                    count = count + 1;
+                                }
+                                $("body").append(txt_start);
+                                var txt_final = "</div>";
+                                $("body").append(txt_final);
+                            }
+                        })
+                    },
+                    error: function (xhr) {
+                        alert("An error occured: " + xhr.status + " " + xhr.statusText);
+                    }
+
+                })
+            })
+        })
+
+
+    </script>
+</head>
+<body>
+
+ <div class="jumbotron text-center">
+<h3>Suggested emoticons for Emotion</h3>
+     <!--<p><i class="em em-angry"></i></p>-->
+ </div>
+
+    Search: <input type="text" name="search">
+    <button type="button">Go</button>
+
+</body>
+</html>
+
