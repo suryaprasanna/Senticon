@@ -1,10 +1,8 @@
 var path = require('path');
 var temp = require('./temp');
 var express = require('express');
-
-
-var express = require('express')
-var app = express()
+var api = require('./api');
+var app = express();
 
 express.static(path.resolve('./public'));
 
@@ -13,7 +11,11 @@ app.get('/', function(req, res){
 });
 
 app.get('/ajax/endpoint', function (req, res) {
-    res.send(JSON.stringify(temp.test()));
+    console.log(req.query);
+    api.analyze(req.query.search, function(err, result){
+        if (err) return res.status(500).send(err);
+        res.send(result);
+    });
 });
 
 console.log('localhost:3000');

@@ -12,10 +12,13 @@
 
     <script type="text/javascript">
         $("document").ready(function() {
-            $("button").click(function () {
+            $('#search-form').on('submit', function (ev) {
+                ev.preventDefault();
+                var formData = $(this).serialize();
                 $.ajax({
                     type:'GET',
-                    url: '/ajax/endpoint',
+                    url: '/ajax/endpoint/',
+                    data: formData,
                     dataType: 'json',
                     success: function (data) {
                         $(document).ready(function () {
@@ -25,8 +28,16 @@
                             } else {
                                 console.log("Data is : " + data);
                                 var count = 0;
+                                if (removeFlag == undefined || removeFlag) {
+                                    var removeFlag = false;
+                                } else {
+                                    $(".row0").remove();
+                                    $(".row1").remove();
+                                    $(".row2").remove();
+                                    $(".row3").remove();
+                                    $(".row4").remove();
+                                }
                                 var txt_start = "<div class=\"container\">";
-
                                 while (count < 5) {
                                     var temp = data.tones;
                                     console.log("Data tones is : " + data.tones);
@@ -46,7 +57,7 @@
                                     }
                                     var txt = '<div class=\"row\ ' + count + '\">';
                                     var txt1 = '<div class="col-1"><p><i class=' + place + '></i></p></div>';
-                                    var txt2 = '<div class="col-2"><p><i class=' + score + '></i></p>';
+                                    var txt2 = '<div class="col-2"><p>' + score + '</p>';
                                     var txt3 = "</div></div>";
                                     txt_start = txt_start +txt +txt1+ txt2+ txt3;
                                     count = count + 1;
@@ -75,8 +86,10 @@
      <!--<p><i class="em em-angry"></i></p>-->
  </div>
 
-    Search: <input type="text" name="search">
-    <button type="button">Go</button>
+    <form id="search-form">
+        Search: <input type="text" name="search">
+        <button type="submit">Go</button>
+    </form>
 
 </body>
 </html>
